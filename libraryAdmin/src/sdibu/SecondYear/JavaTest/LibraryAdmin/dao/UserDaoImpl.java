@@ -3,6 +3,7 @@ package sdibu.SecondYear.JavaTest.LibraryAdmin.dao;
 import java.sql.*;
 import java.util.*;
 
+import sdibu.SecondYear.JavaTest.LibraryAdmin.bean.AdminUser;
 import sdibu.SecondYear.JavaTest.LibraryAdmin.bean.users;
 import sdibu.SecondYear.JavaTest.LibraryAdmin.util.DBTool;
 
@@ -33,18 +34,46 @@ public class UserDaoImpl implements UsersDao {
 
 	@Override
 	public boolean deleteUserById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		boolean flag = false;		
+		Connection conn = DBTool.getConnection();
+		Statement state = conn.createStatement();
+		String sql = "delete from contracts where id ="+id;
+		int result = state.executeUpdate(sql);
+		if(result == 1) 			
+			flag = true;
+		state.close();				
+		return flag;
 	}
 
 	@Override
-	public boolean addUser(users user) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addUser(AdminUser user) throws Exception {
+		boolean flag = false;
+		int id = user.getId();
+		String name = user.getName();
+		String passward = user.getPassward();
+		boolean power = false;
+		boolean frozen = false;//用户基本信息
+		
+		Connection conn = DBTool.getConnection();
+		
+		String sql = "insert into users(id,name,passward,power,forzen) values(?,?,?,?,?)";
+		PreparedStatement state = conn.prepareStatement(sql);
+		state.setInt(1, id);
+		state.setString(2, name);
+		state.setString(3, passward);
+		state.setBoolean(4, power);
+		state.setBoolean(5, frozen);
+							
+		int result = state.executeUpdate();
+		if(result == 1) {			
+			flag = true;
+		}
+		state.close();
+		return flag;//将用户信息添加到数据库
 	}
 
 	@Override
-	public boolean updateUser(users user) throws Exception {
+	public boolean updateUser(AdminUser user) throws Exception {
 		// TODO Auto-generated method stub
 		return false;
 	}
