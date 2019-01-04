@@ -37,10 +37,11 @@ public class UserDaoImpl implements UsersDao {
 		boolean flag = false;		
 		Connection conn = DBTool.getConnection();
 		Statement state = conn.createStatement();
-		String sql = "delete from contracts where id ="+id;
+		String sql = "delete from users where id ="+id;
 		int result = state.executeUpdate(sql);
 		if(result == 1) 			
 			flag = true;
+		System.out.println("删除成功");
 		state.close();				
 		return flag;
 	}
@@ -56,7 +57,7 @@ public class UserDaoImpl implements UsersDao {
 		
 		Connection conn = DBTool.getConnection();
 		
-		String sql = "insert into users(id,name,passward,power,forzen) values(?,?,?,?,?)";
+		String sql = "insert into users(id,name,passW,power,frozen) values(?,?,?,?,?)";
 		PreparedStatement state = conn.prepareStatement(sql);
 		state.setInt(1, id);
 		state.setString(2, name);
@@ -67,6 +68,7 @@ public class UserDaoImpl implements UsersDao {
 		int result = state.executeUpdate();
 		if(result == 1) {			
 			flag = true;
+			System.out.println("添加成功");
 		}
 		state.close();
 		return flag;//将用户信息添加到数据库
@@ -77,5 +79,6 @@ public class UserDaoImpl implements UsersDao {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 
 }

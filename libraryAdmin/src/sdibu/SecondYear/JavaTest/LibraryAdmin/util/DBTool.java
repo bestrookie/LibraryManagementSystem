@@ -8,17 +8,19 @@ public class DBTool {
 	private static Connection conn  = null;
 	public static Connection getConnection(){
 		try {
-			String user = "root";
+			String user = "visitor";
 			String url = "jdbc:mysql://localhost:3306/users?useSSL=false";
 			if(conn == null || conn.isClosed()){
 				try {
 					Class.forName("com.mysql.jdbc.Driver");
+					//System.out.println("加载数据库驱动成功");
 					conn = DriverManager.getConnection(url,user,"123456");
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
+				//System.out.println("连接数据库成功");
 			}
 		} catch (SQLException e) {			
 			e.printStackTrace();
