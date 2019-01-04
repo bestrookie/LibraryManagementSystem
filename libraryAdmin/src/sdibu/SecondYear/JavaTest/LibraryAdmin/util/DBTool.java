@@ -14,10 +14,12 @@ public class DBTool {
 	private static Connection conn  = null;
 	public static Connection getConnection(){
 		try {
+			String user = "root";
+			String url = "jdbc:mysql://localhost:3306/users?useSSL=false";
 			if(conn == null || conn.isClosed()){
 				try {
 					Class.forName("com.mysql.jdbc.Driver");
-					conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/users?useSSL=false","visitor","123456");
+					conn = DriverManager.getConnection(url,","123456");
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
