@@ -1,23 +1,19 @@
 package sdibu.SecondYear.JavaTest.LibraryAdmin.util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.sql.*;
+import java.util.*;
 import sdibu.SecondYear.JavaTest.LibraryAdmin.bean.users;
 
 public class DBTool {
 	private static Connection conn  = null;
 	public static Connection getConnection(){
 		try {
+			String user = "root";
+			String url = "jdbc:mysql://localhost:3306/users?useSSL=false";
 			if(conn == null || conn.isClosed()){
 				try {
 					Class.forName("com.mysql.jdbc.Driver");
-					conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/users?useSSL=false","visitor","123456");
+					conn = DriverManager.getConnection(url,user,"123456");
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				} catch (SQLException e) {
