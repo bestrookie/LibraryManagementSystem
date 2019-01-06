@@ -4,7 +4,7 @@ public class AdminUser extends users {
 	private boolean power;
 	private boolean frozen;
 
-	public AdminUser(int id, String name, String passward, boolean power, boolean frozen) {
+	public AdminUser(String id, String name, String passward, boolean power, boolean frozen) {
 		super(id, name, passward);
 		this.power = power;
 		this.frozen = frozen;

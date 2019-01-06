@@ -1,15 +1,15 @@
 package sdibu.SecondYear.JavaTest.LibraryAdmin.bean;
 //读取用户基本信息
 public class users {
-	private int id;
+	private String id;
 	private String name;
 	private String passward;
 	//private boolean power;
 	//private boolean frozen;
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -36,7 +36,7 @@ public class users {
 	public void setFrozen(boolean frozen) {
 		this.frozen = frozen;
 	}*/
-	public users(int id, String name, String passward) {
+	public users(String id, String name, String passward) {
 		super();
 		this.id = id;
 		this.name = name;

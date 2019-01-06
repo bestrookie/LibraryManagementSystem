@@ -10,20 +10,20 @@ import sdibu.SecondYear.JavaTest.LibraryAdmin.util.DBTool;
 public class UserDaoImpl implements UsersDao {
 
 	@Override
-	public List<users> searchByName(String name) throws Exception {
+	public List<users> searchById(String id) throws Exception {
 		List<users> list = new ArrayList<users>();
 		Connection conn = DBTool.getConnection();
 		ResultSet rs;
 		PreparedStatement pst = conn.prepareStatement("select * from "
-				+ "contracts where name like ? order by "
-				+ "convert(name using GBK)");
-		pst.setString(1, "%"+name+"%");
+				+ "users where id like ? order by "
+				+ "convert(id using GBK)");
+		pst.setString(1, "%"+id+"%");
 		rs = pst.executeQuery();
 		while(rs.next()) {
-			int id = rs.getInt(1);
+			String ID = rs.getString(1);
 			String n = rs.getString(2);
 			String pw = rs.getString(3);
-			users user = new users(id, n, pw);
+			users user = new users(ID, n, pw);
 			list.add(user);
 			
 		}
@@ -33,7 +33,7 @@ public class UserDaoImpl implements UsersDao {
 	}
 
 	@Override
-	public boolean deleteUserById(int id) throws Exception {
+	public boolean deleteUserById(String id) throws Exception {
 		boolean flag = false;		
 		Connection conn = DBTool.getConnection();
 		Statement state = conn.createStatement();
@@ -49,7 +49,7 @@ public class UserDaoImpl implements UsersDao {
 	@Override
 	public boolean addUser(AdminUser user) throws Exception {
 		boolean flag = false;
-		int id = user.getId();
+		String id = user.getId();
 		String name = user.getName();
 		String passward = user.getPassward();
 		boolean power = false;
@@ -59,7 +59,7 @@ public class UserDaoImpl implements UsersDao {
 		
 		String sql = "insert into users(id,name,passW,power,frozen) values(?,?,?,?,?)";
 		PreparedStatement state = conn.prepareStatement(sql);
-		state.setInt(1, id);
+		state.setString(1, id);
 		state.setString(2, name);
 		state.setString(3, passward);
 		state.setBoolean(4, power);
