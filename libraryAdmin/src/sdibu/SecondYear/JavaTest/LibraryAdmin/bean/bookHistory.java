@@ -3,28 +3,41 @@ package sdibu.SecondYear.JavaTest.LibraryAdmin.bean;
 import java.util.*;
 import java.text.*;
 public class bookHistory {
-	private ArrayList<String> userId;
+	private String userId;
 	private String bookId;
-	private ArrayList<Date> lend;
-	private ArrayList<Date> giveBack;
+	private Date lend;
+	private Date giveBack;
 	private boolean isBorrow;
 	
 	public bookHistory() {
 		// TODO Auto-generated constructor stub
 	}
-	public bookHistory(ArrayList<String> user,String book,ArrayList<Date> lend,ArrayList<Date> giveBack,boolean isBorrow) {
+	public bookHistory(String user,String book,Date lend,Date giveBack,boolean isBorrow) {
 		this.userId = user;
 		this.bookId = book;
 		this.lend = lend;
 		this.giveBack = giveBack;
 		this.isBorrow = isBorrow;
 	}
+	public bookHistory(String user, String book, String lend, String giveBack, boolean isBorrow){
+		// TODO Auto-generated constructor stub
+		this.userId = user;
+		this.bookId = book;
+		try {
+			SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
+			this.lend = time.parse(lend);		
+			this.giveBack = time.parse(giveBack);
+		}catch(Exception e) {
+			System.out.println("时间不合法");
+		}
+		this.isBorrow = isBorrow;
+	}
 	//借书
 	public boolean borrowBook(String user,Date lend,Date giveBack) {
 		if(this.isBorrow) {
-			this.lend.add(lend);
-			this.giveBack.add(giveBack);
-			this.userId.add(user);
+			this.lend=lend;
+			this.giveBack=giveBack;
+			this.userId=user;
 			this.isBorrow = true;
 			return true;
 		}
@@ -33,20 +46,20 @@ public class bookHistory {
 	//还书
 	public void returnBook(Date giveBack) {
 		this.isBorrow = false;
-		this.giveBack.set(0,giveBack);
+		this.giveBack=giveBack;
 		//数据库操作
 	}
 	//续借
 	public void renew(int days) {
 		Calendar ca = Calendar.getInstance();
 		ca.add(Calendar.DATE, days);
-		this.giveBack.set(0,ca.getTime());
+		this.giveBack=ca.getTime();
 	}
 	
-	public List<String> getUserId() {
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(ArrayList<String> userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 	public String getBookId() {
@@ -55,16 +68,16 @@ public class bookHistory {
 	public void setBookId(String bookId) {
 		this.bookId = bookId;
 	}
-	public List<Date> getLend() {
+	public Date getLend() {
 		return lend;
 	}
-	public void setLend(ArrayList<Date> lend) {
+	public void setLend(Date lend) {
 		this.lend = lend;
 	}
-	public List<Date> getGiveBack() {
+	public Date getGiveBack() {
 		return giveBack;
 	}
-	public void setGiveBack(ArrayList<Date> giveBack) {
+	public void setGiveBack(Date giveBack) {
 		this.giveBack = giveBack;
 	}
 	public boolean isBorrow() {
@@ -72,7 +85,7 @@ public class bookHistory {
 	}
 	public void setBorrow(boolean isBorrow) {
 		this.isBorrow = isBorrow;
-	}
+    }
 	
 	
 }

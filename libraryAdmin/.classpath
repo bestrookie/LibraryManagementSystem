@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-10">
+	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/de&apos;l&apos;l/eclipse-workspace/mysql-connector-java-5.1.38.jar">
+	<classpathentry kind="lib" path="C:/Users/bestsort/Documents/Tencent Files/839682005/FileRecv/mysql-connector-java-5.1.38.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
