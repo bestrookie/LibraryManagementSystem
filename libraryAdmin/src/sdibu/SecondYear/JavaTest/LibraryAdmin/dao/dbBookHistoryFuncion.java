@@ -1,4 +1,4 @@
-package sdibu.SecondYear.JavaTest.LibraryAdmin.util.dbBookHistory;
+package sdibu.SecondYear.JavaTest.LibraryAdmin.dao;
 import sdibu.SecondYear.*;
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -10,37 +10,38 @@ import sdibu.SecondYear.JavaTest.LibraryAdmin.bean.bookHistory;
 public class dbBookHistoryFuncion {
 	
 		private dbBookHistoryDriver db=new dbBookHistoryDriver();
-		private String setDate(java.util.Date list) {
-	    	SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
-	    	return time.format(list);
-	    }
-	    public int addHistory(bookHistory book) throws Exception{
+		
+	    public int addBookHistory(bookHistory book) throws Exception{
 	    	/*System.out.println("insert into bookhistory values('"+book.getUserId()+"','"
 	        		+book.getBookId()+"','"+setDate(book.getLend())+"','"+
 	        		setDate(book.getGiveBack())+"','"+(book.isBorrow()?1:0)+"')");
 	        */
 	        Connection con=db.getCon();
-	        String sql="insert into bookhistory values('"+book.getUserId()+"','"
-	        		+book.getBookId()+"','"+setDate(book.getLend())+"','"+
-	        		setDate(book.getGiveBack())+"','"+(book.isBorrow()?1:0)+"')";
-	        Statement stmt=con.createStatement();//创建一个Statement连接
-	        int result=stmt.executeUpdate(sql);//执行sql语句
-	        db.close(stmt,con);
+	        String sql="insert into bookhistory values(?,?,?,?,?,?)";
+	        PreparedStatement pst = con.prepareStatement(sql);
+	        pst.setString(1, book.getBookName());
+	        pst.setString(2,book.getUserId());
+	        pst.setInt(3, book.getBookId());
+	        pst.setString(4, book.getLend().toString());
+	        pst.setString(5, book.getGiveBack().toString());
+	        pst.setBoolean(6, book.isBorrow());
+	        int result = pst.executeUpdate();
+	        db.close(pst,con);
 	        return result;
 	    }
-	    public int addHistory(String bookId) throws Exception{
+	    public int addBookHistory(String bookName,int bookId) throws Exception{
 	    	Connection con=db.getCon();
-	        String sql="insert into bookhistory values('null','"+bookId+"','0000-00-00'"
-	        		+ ",'0000-00-00','0')";
+	        String sql="insert into bookhistory values('"+bookName+"','null','"+bookId+"','1998-01-01'"
+	        		+ ",'1998-01-01','0')";
 	        Statement stmt=con.createStatement();
 	        int result = stmt.executeUpdate(sql);
 	        db.close(stmt, con);
 	        return result;
 	    }
-	    public int addBookHistory(String userId,String bookId,String lend,String giveBack,boolean isBorrow)
+	    public int addBookHistory(String bookName,String userId,int bookId,String lend,String giveBack,boolean isBorrow)
 	        throws Exception{
 		        Connection con=db.getCon();
-		        String sql="insert into bookhistory values('"+userId+"','"+
+		        String sql="insert into bookhistory values('"+bookName+"','"+userId+"','"+
 		        bookId+"','"+lend+"','"+giveBack+"','"+(isBorrow?1:0)+"')";
 		       /* System.out.println("insert into db_bookhistory values('"+userId+"',"+
 		        bookId+",'"+lend+"',"+giveBack+"','"+(isBorrow?1:0)+"')");*/
@@ -52,12 +53,13 @@ public class dbBookHistoryFuncion {
 	    
 	    public int updateBookHistory(bookHistory before,bookHistory to) throws Exception {
 	    	Connection conn = db.getCon();
-			String sql = "update bookhistory set borrow=?,isBorrow=? where bookId=? lend=?";
+			String sql = "update bookhistory set borrow=?,isBorrow=? where bookId=? lend=? bookName=?";
 			PreparedStatement pst = conn.prepareStatement(sql);
-			pst.setString(1, setDate(to.getGiveBack()));
+			pst.setString(1, to.getGiveBack().toString());
 			pst.setBoolean(2, to.isBorrow());
-			pst.setString(3, before.getBookId());
-			pst.setString(4, setDate(before.getLend()));
+			pst.setInt(3, before.getBookId());
+			pst.setString(4, before.getLend().toString());
+			pst.setString(5, before.getBookName());
 			int rs = pst.executeUpdate();
 			db.close(pst, conn);
 			return rs;
@@ -71,17 +73,18 @@ public class dbBookHistoryFuncion {
 			pst.setString(1, id);
 			rs = pst.executeQuery();		
 			while(rs.next()) {
-				String user = rs.getString(1);
-				String book = rs.getString(2);
-				Date lend = rs.getDate(3);
-				Date borrow = rs.getDate(4);
-				boolean isBorrow = rs.getBoolean(5);
+				String bookName = rs.getString(1);
+				String user = rs.getString(2);
+				int book = rs.getInt(3);
+				days lend = new days(rs.getDate(4));
+				days borrow = new days(rs.getDate(5));
+				boolean isBorrow = rs.getBoolean(6);
+				
 				System.out.println(user+" "+book+" "+lend+" "+borrow+" "+isBorrow);
-				result.add(new bookHistory(user, book, lend, borrow, isBorrow));
+				result.add(new bookHistory(user, bookName,book,lend, borrow, isBorrow));
 			}
 			rs.close();
 			pst.close();
 			return result;
-		}
-	    
+		}   
 	}

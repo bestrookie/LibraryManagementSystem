@@ -9,7 +9,7 @@ public class DBTool {
 	public static Connection getConnection(){
 		try {
 			String user = "visitor";
-			String url = "jdbc:mysql://localhost:3306/users?useSSL=false";
+			String url = "jdbc:mysql://localhost:3306/db_library?useSSL=false";
 			if(conn == null || conn.isClosed()){
 				try {
 					Class.forName("com.mysql.jdbc.Driver");

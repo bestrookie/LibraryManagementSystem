@@ -3,7 +3,6 @@ package sdibu.SecondYear.JavaTest.LibraryAdmin.dao;
 import java.sql.*;
 import java.util.*;
 
-import sdibu.SecondYear.JavaTest.LibraryAdmin.bean.AdminUser;
 import sdibu.SecondYear.JavaTest.LibraryAdmin.bean.users;
 import sdibu.SecondYear.JavaTest.LibraryAdmin.util.DBTool;
 
@@ -17,13 +16,15 @@ public class UserDaoImpl implements UsersDao {
 		PreparedStatement pst = conn.prepareStatement("select * from "
 				+ "users where id like ? order by "
 				+ "convert(id using GBK)");
-		pst.setString(1, "%"+id+"%");
+		pst.setString(1, id);
 		rs = pst.executeQuery();
 		while(rs.next()) {
 			String ID = rs.getString(1);
 			String n = rs.getString(2);
 			String pw = rs.getString(3);
-			users user = new users(ID, n, pw);
+			boolean sf = rs.getBoolean(4);
+			boolean fr = rs.getBoolean(5);
+			users user = new users(ID, n, pw,sf,fr);
 			list.add(user);
 			
 		}
@@ -47,7 +48,7 @@ public class UserDaoImpl implements UsersDao {
 	}
 
 	@Override
-	public boolean addUser(AdminUser user) throws Exception {
+	public boolean addUser(users user) throws Exception {
 		boolean flag = false;
 		String id = user.getId();
 		String name = user.getName();
@@ -75,9 +76,31 @@ public class UserDaoImpl implements UsersDao {
 	}
 
 	@Override
-	public boolean updateUser(AdminUser user) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean updateUser(users user) throws Exception {
+		boolean flag = false;
+		String id = user.getId();
+		String name = user.getName();
+		String passward = user.getPassward();
+		boolean power = user.isPower();
+		boolean frozen = user.isFrozen();//用户基本信息
+		
+		Connection conn = DBTool.getConnection();
+		String sql = "update users set name=?,passW=?,power=?,frozen=? where id=?";
+		PreparedStatement state = conn.prepareStatement(sql);
+		state.setString(1, name);
+		state.setString(2, passward);
+		state.setBoolean(3, power);
+		state.setBoolean(4, frozen);
+		state.setString(5, id);
+		
+		int result = state.executeUpdate();
+		if(result == 1) {			
+			flag = true;
+			System.out.println("修改成功");
+		}
+		state.close();
+		
+		return flag;
 	}
 	
 

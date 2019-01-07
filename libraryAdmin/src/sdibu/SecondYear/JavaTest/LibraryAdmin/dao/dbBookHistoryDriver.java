@@ -1,4 +1,4 @@
-package sdibu.SecondYear.JavaTest.LibraryAdmin.util.dbBookHistory;
+package sdibu.SecondYear.JavaTest.LibraryAdmin.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

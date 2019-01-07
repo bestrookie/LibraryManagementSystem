@@ -4,8 +4,8 @@ public class users {
 	private String id;
 	private String name;
 	private String passward;
-	//private boolean power;
-	//private boolean frozen;
+	private boolean power;
+	private boolean frozen;
 	public String getId() {
 		return id;
 	}
@@ -24,7 +24,7 @@ public class users {
 	public void setPassward(String passward) {
 		this.passward = passward;
 	}
-	/*public boolean isPower() {
+	public boolean isPower() {
 		return power;
 	}
 	public void setPower(boolean power) {
@@ -35,14 +35,14 @@ public class users {
 	}
 	public void setFrozen(boolean frozen) {
 		this.frozen = frozen;
-	}*/
-	public users(String id, String name, String passward) {
+	}
+	public users(String id, String name, String passward, boolean power, boolean frozen) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.passward = passward;
-		//this.power = power;
-		//this.frozen = frozen;
+		this.power = power;
+		this.frozen = frozen;
 	}
 
 }
