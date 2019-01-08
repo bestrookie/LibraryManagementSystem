@@ -8,7 +8,7 @@ public class DBTool {
 	private static Connection conn  = null;
 	public static Connection getConnection(){
 		try {
-			String user = "visitor";
+			String user = "root";
 			String url = "jdbc:mysql://localhost:3306/db_library?useSSL=false";
 			if(conn == null || conn.isClosed()){
 				try {

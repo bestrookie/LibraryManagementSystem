@@ -16,17 +16,22 @@ public class BooksInformation {
 		this.setBookName(bookName);
 		this.setTheAuthor(theAuthor);
 		this.setPublishedDate(publishedDate);
-		this.setCategory(
-				category);
-	}
+		this.setCategory(category);
+}
+  public BooksInformation(String bookName, String theAuthor, Date publishedDate, String category) {
+	this.setBookName(bookName);
+	this.setTheAuthor(theAuthor);
+	this.setPublishedDate(publishedDate);
+	this.setCategory(category);
+	id = -1;
+  }
   public String setTime(java.util.Date list) {
 	  SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
 		return time.format(list);
 	
 }
-  public String[] BooksInformationToString() {
-	  
-	  String[] str = {BookName,TheAuthor,setTime(publishedDate),Category};
+  public String[] BooksInformationToString() throws Exception {
+	  String[] str = {BookName,TheAuthor,setTime(publishedDate),Category,(new bookHistory().jugeId(id)?"ря╫ХЁЖ":"©и╫Х")};
 	  return  str;
   }
 public int getId() {

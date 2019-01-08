@@ -31,18 +31,21 @@ import javax.swing.table.TableColumn;
 
 import java.util.*;
 public class bookHistoryGui extends JFrame{
-	 JFrame window = new JFrame();
-	 Container con = window.getContentPane();
+	 Container con = this.getContentPane();
 	 ListModel jListModel = new DefaultComboBoxModel<bookHistory>();
 	 JButton sure = new JButton("确定");
 	 JLabel label;
 	 MyTable jTable;
 	 JScrollPane jsp;
+	 
 	 private String setDate(java.util.Date list) {
 	    	SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
 	    	return time.format(list);
-	}
+	 }
+	 
+	 
 	public void bookHistoryGuiInit(String user) throws Exception { 
+		//System.out.println("in bookHistoryGuiInit the user is"+user);
 		String []columnNames= {
 				"书名","借书日期","应还日期"
 		};
@@ -53,12 +56,17 @@ public class bookHistoryGui extends JFrame{
 			e1.printStackTrace();
 			}	//窗口皮肤
 		List<bookHistory>book = new dbBookHistoryFuncion().searchBookHistory(user, "userId");
-		String obj[][] = new String[3][0];
+		String obj[][] = new String[book.size()][0];
 		int cnt = 0;
 		for(bookHistory bufS:book) {
-			System.out.println();
-			obj[cnt++] = bufS.userToString();
 			
+			/*Debug 
+			 * 
+			 * System.out.println();
+			for(String x:bufS.userToString())
+				System.out.print(x+" " );
+			System.out.println();*/
+			obj[cnt++] = bufS.userToString();
 		}
 		sure.setVisible(true);	
 		
@@ -82,7 +90,6 @@ public class bookHistoryGui extends JFrame{
 		setBounds(500,500,500,500);
 		setVisible(true);
 		jTable.setRowHeight(50);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(jsp,BorderLayout.CENTER);
 		add(sure,BorderLayout.SOUTH);
 		sure.addActionListener(new ActionListener() {
@@ -97,6 +104,6 @@ public class bookHistoryGui extends JFrame{
 	
 	public static void main(String[] args) throws Exception {
 		bookHistoryGui xx = new bookHistoryGui();
-		xx.bookHistoryGuiInit("null");        //创建窗口
+		xx.bookHistoryGuiInit("10007");        //创建窗口
      }
 }

@@ -2,10 +2,13 @@ package sdibu.SecondYear.JavaTest.LibraryAdmin.bean;
 
 import java.util.*;
 
+
 import sdibu.SecondYear.JavaTest.LibraryAdmin.dao.days;
 import sdibu.SecondYear.JavaTest.LibraryAdmin.dao.dbBookHistoryDriver;
 import sdibu.SecondYear.JavaTest.LibraryAdmin.dao.dbBookHistoryFuncion;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.*;
 public class bookHistory {
 	private String userId;
@@ -44,6 +47,27 @@ public class bookHistory {
 			System.out.println("时间不合法");
 		}
 		this.isBorrow = isBorrow;
+	}
+	public boolean jugeId(int id) throws Exception  {
+		dbBookHistoryDriver db= new dbBookHistoryDriver();
+		java.sql.Connection con=db.getCon();
+        ResultSet rs;
+		PreparedStatement pst = con.prepareStatement("select * from "
+				+ "bookhistory where bookId=?");
+		pst.setInt(1, id);
+		rs = pst.executeQuery();
+		if(rs.next()) {
+			int book = rs.getInt(3);
+			boolean isBorrow = rs.getBoolean(6);	
+			if(isBorrow) {
+				rs.close();
+				pst.close();
+				return true;
+			}
+		}
+		rs.close();
+		pst.close();
+		return false;
 	}
 	//借书
 	public boolean borrowBook(String user,days lend,days giveBack) {

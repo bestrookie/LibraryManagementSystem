@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -49,7 +51,7 @@ public class LoginGUI extends JFrame {
 		Container c =this.getContentPane();
 		
 		//JFrame jf = new JFrame();
-		Image icon = Toolkit.getDefaultToolkit().getImage("src/sdibu//SecondYear/JavaTest/LibraryAdmin/gui/Logo.png");  // 图片的具体位置
+		Image icon = Toolkit.getDefaultToolkit().getImage("sdibu//SecondYear/JavaTest/LibraryAdmin/gui/Logo.png");  // 图片的具体位置
 		this.setIconImage(icon);   //设置窗口的logo
 		try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -60,11 +62,11 @@ public class LoginGUI extends JFrame {
 		c.setLayout(new BorderLayout());//边界布局
 		
 		//Image backGround = Toolkit.getDefaultToolkit().getImage("src/sdibu//SecondYear/JavaTest/LibraryAdmin/gui/BackGround.png");
-		ImageIcon backGround = new ImageIcon("src/sdibu//SecondYear/JavaTest/LibraryAdmin/gui/BackGround.jpg");
+		ImageIcon backGround = new ImageIcon("sdibu//SecondYear/JavaTest/LibraryAdmin/gui/BackGround.jpg");
 		JLabel label = new JLabel(null,backGround,JLabel.CENTER);
 		c.add(label,BorderLayout.NORTH);
 		//添加背景图在上方
-		ImageIcon userLogo = new ImageIcon("src/sdibu//SecondYear/JavaTest/LibraryAdmin/gui/UserLogo.png");
+		ImageIcon userLogo = new ImageIcon("sdibu//SecondYear/JavaTest/LibraryAdmin/gui/userLogo.png");
 		JLabel label2 = new JLabel(null,userLogo,JLabel.CENTER);
 		c.add(label2,BorderLayout.WEST);
 		//左侧小头像
@@ -72,14 +74,27 @@ public class LoginGUI extends JFrame {
 		
 		//用户名框
 		JPasswordField password=new JPasswordField(30);
-		/*password.addActionListener(new ActionListener() {
+		password.addKeyListener(new KeyListener() {
+			
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void keyPressed(KeyEvent e) {
+				
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
-		});*/
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		//密码框
 		JPanel top = new JPanel();
 		Component box1 = Box.createVerticalStrut(100);
@@ -104,6 +119,11 @@ public class LoginGUI extends JFrame {
 				UserDaoImpl loginId = new UserDaoImpl();
 				List<users> list = new ArrayList<users>();
 				try {
+					if(username.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "账号不能为空，请重新输入", "错误", 
+								JOptionPane.ERROR_MESSAGE);
+					
+				}else {
 					list = loginId.searchById(username.getText());
 					if(list.isEmpty()) {
 						//用户不存在
@@ -113,38 +133,43 @@ public class LoginGUI extends JFrame {
 						
 					}
 					else {
-						//用户存在
-						String c1 = new String(list.get(0).getPassward());
-						String c2 = new String(password.getPassword());
-//						System.out.println(c1.length());
-//						
-//						System.out.println(c2.length());
-//						System.out.println(list.get(0).getPassward().equals(password.getPassword()));
-						//密码正确
-						if(c1.equals(c2)) {
-							//关闭当前窗体，打开主界面窗体（判断用户身份）
-							boolean fr = list.get(0).isFrozen();
-							//判断账号是否被冻结
-							if(fr) {
-								JOptionPane.showMessageDialog(null, "账号已被冻结，请联系管理员进行解封", "错误", 
+							//用户存在
+							String c1 = new String(list.get(0).getPassward());
+							String c2 = new String(password.getPassword());
+//							System.out.println(c1.length());
+//							
+//							System.out.println(c2.length());
+//							System.out.println(list.get(0).getPassward().equals(password.getPassword()));
+							//密码正确
+							if(c1.equals(c2)) {
+								//关闭当前窗体，打开主界面窗体（判断用户身份）
+								boolean fr = list.get(0).isFrozen();
+								//判断账号是否被冻结
+								if(fr) {
+									JOptionPane.showMessageDialog(null, "账号已被冻结，请联系管理员进行解封", "错误", 
+											JOptionPane.ERROR_MESSAGE);
+								}else {
+									boolean sf = list.get(0).isPower();
+									if(sf) {
+									 	//判断用户身份为管理
+										AdminGui superAdmin = new AdminGui();
+										superAdmin.Funcion();
+										superAdmin.AdminGuiInit();
+										
+									}
+									else {
+										BooksInformationGUI normalUser = new BooksInformationGUI(list.get(0).getId());
+									}
+								}
+								dispose();//关闭当前窗体
+							}//密码错误
+							else {
+								JOptionPane.showMessageDialog(null, "密码错误，请检查账号密码", "错误", 
 										JOptionPane.ERROR_MESSAGE);
-							}else {
-								boolean sf = list.get(0).isPower();
-								if(sf) {
-								 	//判断用户身份
-									System.out.println("管理员");
-								}
-								else {
-									System.out.println("普通用户");
-								}
 							}
-							//dispose();//关闭当前窗体
-						}//密码错误
-						else {
-							JOptionPane.showMessageDialog(null, "密码错误，请检查账号密码", "错误", 
-									JOptionPane.ERROR_MESSAGE);
-						}
+						
 					}
+				}
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -155,6 +180,7 @@ public class LoginGUI extends JFrame {
 		});
 		down.add(login);
 		c.add(down,BorderLayout.SOUTH);
+		getRootPane().setDefaultButton(login);
 		//登录按钮，放在下方
 		JPanel east = new JPanel();
 		final JLabel east1 = new JLabel("<html> <br><br><br><br>忘记密码<html>");
@@ -178,7 +204,7 @@ public class LoginGUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					URI uri = new URI("file:///C:/Users/de'l'l/Desktop/GUI素材/ForgotPassward.html");//找回密码本地超链接
+					URI uri = new URI("file:///C:/Users/bestsort/Desktop/GUI素材/ForgotPassward.html");//找回密码本地超链接
 					//注：可以通过web实现数据库管理，后续优化
 					
 					Desktop desktop = Desktop.getDesktop();

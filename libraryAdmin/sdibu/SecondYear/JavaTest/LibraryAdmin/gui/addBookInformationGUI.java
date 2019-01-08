@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -30,15 +32,6 @@ public class addBookInformationGUI extends JFrame {
 //		GroupLayout group = new GroupLayout(c);
 //		c.setLayout(group);
 		JPanel box = new JPanel();
-		
-		JPanel box5 = new JPanel();
-		Component n5 = Box.createVerticalStrut(50);
-		final JLabel tips5 = new JLabel("书籍编号");
-		JTextField ip5 = new JTextField(30);
-		box5.add(n5);
-		box5.add(tips5);
-		box5.add(ip5);
-		box.add(box5);
 		
 		JPanel box1 = new JPanel();
 		Component n1 = Box.createVerticalStrut(50);
@@ -76,6 +69,15 @@ public class addBookInformationGUI extends JFrame {
 		box4.add(ip4);
 		box.add(box4);
 		
+		JPanel box5 = new JPanel();
+		Component n5 = Box.createVerticalStrut(50);
+		final JLabel tips5 = new JLabel("书籍数目");
+		JTextField ip5 = new JTextField(30);
+		box5.add(n5);
+		box5.add(tips5);
+		box5.add(ip5);
+		box.add(box5);
+		
 		c.add(box);
 		
 		JPanel down = new JPanel();
@@ -83,11 +85,20 @@ public class addBookInformationGUI extends JFrame {
 		Dimension preferredSize = new Dimension(100,30);
 		sure.setPreferredSize(preferredSize );//设置按钮大小
 		down.add(sure);
+		sure.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
 		c.add(down, BorderLayout.SOUTH);
+		
+		
 		
 		this.pack();
 		this.setVisible(true);//窗体可见
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//this.setSize(600, 450);
 		this.setBounds((width - 500) / 2,(height - 400) / 2, 500, 400);//窗体大小，居中
 		this.setResizable(false);//禁止拉伸窗口，最大化
