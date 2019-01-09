@@ -11,7 +11,7 @@ public interface BooksInformationDao {
           //增加书籍信息
           int addBooksInformation(BooksInformation c) throws Exception;
           //修改书籍信息
-          boolean updateInformation(BooksInformation c) throws Exception;
+          //boolean updateInformation(BooksInformation c) throws Exception;
           //删除书籍信息
 		 boolean deleteInformation(int id) throws Exception;
 		List<BooksInformation> searchAll() throws Exception;

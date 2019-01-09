@@ -158,7 +158,7 @@ public class LoginGUI extends JFrame {
 										
 									}
 									else {
-										BooksInformationGUI normalUser = new BooksInformationGUI(list.get(0).getId());
+										MainGUI normalUser = new MainGUI(list.get(0).getId());
 									}
 								}
 								dispose();//关闭当前窗体

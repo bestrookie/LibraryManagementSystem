@@ -69,44 +69,8 @@ public class bookHistory {
 		pst.close();
 		return false;
 	}
-	//借书
-	public boolean borrowBook(String user,days lend,days giveBack) {
-		if(this.isBorrow) {
-			this.lend=lend;
-			this.giveBack=giveBack;
-			this.userId=user;
-			this.isBorrow = true;
-			return true;
-		}
-		return false;
-	}
-	//还书
-	public void returnBook(days giveBack) {
-		bookHistory now = this;
-		now.isBorrow = false;
-		now.giveBack=giveBack;
-		dbBookHistoryFuncion db = new dbBookHistoryFuncion();
-		try {
-			db.updateBookHistory(this, now);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	//续借
-	public void renew(int days) {
-		Calendar ca = Calendar.getInstance();
-		ca.add(Calendar.DATE, days);
-		bookHistory now = this;
-		now.giveBack = (days) ca.getTime();
-		dbBookHistoryFuncion db = new dbBookHistoryFuncion();
-		try {
-			db.updateBookHistory(this, now);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
+	
 	public String[] userToString() {
 		String[] res ={bookName,lend.toString(),giveBack.toString()};
 		return res;

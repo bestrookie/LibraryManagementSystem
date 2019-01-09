@@ -4,6 +4,8 @@ package sdibu.SecondYear.JavaTest.LibraryAdmin.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.Book;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -29,8 +31,8 @@ import sdibu.SecondYear.JavaTest.LibraryAdmin.dao.dbBookHistoryFuncion;
 
 public class AdminGui extends JFrame{
 	Container con = this.getContentPane();
-	JButton logOut = new JButton("注销");
-	JButton changeBook = new JButton("书籍信息修改");
+	JButton logOut = new JButton("注销用户");
+	JButton changeBook = new JButton("书籍下架");
 	JButton addBook = new JButton("新书上架");
 	JButton frozenUser = new JButton("冻结用户");
 	JButton unFrozen = new JButton("用户解冻");
@@ -41,13 +43,12 @@ public class AdminGui extends JFrame{
 		this.setLayout(new GridLayout(0,2));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);	//不可拉伸
-		
-		jsp.add(logOut);
+		jsp.add(changeBook);
 		jsp.add(addBook);
 		jsp.add(frozenUser);
 		jsp2.add(seeLibrary);
 		jsp2.add(unFrozen);
-		jsp2.add(changeBook);
+		jsp2.add(logOut);
 		
 		jsp2.setLayout(new BoxLayout(jsp2,BoxLayout.Y_AXIS));
 		jsp.setLayout(new BoxLayout(jsp,BoxLayout.Y_AXIS));
@@ -62,6 +63,7 @@ public class AdminGui extends JFrame{
 		int m = JOptionPane.showConfirmDialog(null, "确定退出？", "温馨提示", JOptionPane.YES_NO_OPTION);
 		return m==0;
 	}
+	
 	public void Funcion() {
 		JButton sure = new JButton("确定");
 		JFrame jf = new JFrame();
@@ -69,20 +71,39 @@ public class AdminGui extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				try {
-				    String[]TableName = {"书籍名称","作者","出版日期","类别","书籍状态"}; 
+				    String[]TableName = {"书籍名称","作者","出版日期","类别","状态"}; 
 					List<BooksInformation> BookList = new BooksInformationDaoImpl().searchAll();
-					String[][] obj = new String[BookList.size()][0];
+					
+					/*Debug
+					for(BooksInformation u:BookList) {
+						String s[] = u.BooksInformationToString();
+						for(String ss:s){
+							System.out.print(ss+" ");
+						}
+						System.out.println();
+					}
+					/*******************************/
+					String[][] obj = new String[BookList.size()][];
+					dbBookHistoryFuncion db = new dbBookHistoryFuncion();
 				   	int cot = 0 ;
+				   	String str[] = null;
 				   	for(int i = 0 ; i<BookList.size(); i++) {
-				   			obj[cot++] = BookList.get(i).BooksInformationToString();
-				   		}
-				   	try {
-						UIManager.setLookAndFeel(new NimbusLookAndFeel());
-						} catch (UnsupportedLookAndFeelException e1) {	
-						e1.printStackTrace();
-						}	//窗口皮肤
+				   			str = BookList.get(i).BooksInformationToString();
+				   			
+				   			//str = str.valueOf(BookList.get(i).getId());
+				   			//str = db.searchBookHistory(str, "bookId").get(0).isBorrow()?"可借":"已借";
+				   			//System.out.println(str);
+				   			//System.out.println("bookIs:"+list.size());
+				   			//System.out.println(list.get(0).isBorrow());
+				   			obj[cot] = str;
+				   			//obj[cot][4] = str;
+				   			//for(String ss:obj[cot])
+				   			//	System.out.print(ss+" ");
+				   			cot++;
+				   	}
+				   	
 				   	MyTable jTable = new MyTable(obj,TableName);
-				 // 设置点击表头自动实现排序
+				   	// 设置点击表头自动实现排序
 				    jTable.setAutoCreateRowSorter(true);
 				    // 设置表头文字居中显示
 				    DefaultTableCellRenderer  renderer = (DefaultTableCellRenderer) jTable.getTableHeader().getDefaultRenderer();
@@ -121,12 +142,34 @@ public class AdminGui extends JFrame{
 					dispose();
 			}
 		});
+/******************增加书籍**********************/
 		addBook.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				addBookInformationGUI addBook = new addBookInformationGUI();
+				
+			}
+		});
+/******************下架书籍**********************/
+		changeBook.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String inputValue = JOptionPane.showInputDialog("请输入要下架的书籍名:"); 
+				try {
+					List<BooksInformation> bookList = new BooksInformationDaoImpl().searByName(inputValue);
+					if(bookList.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "查无此书", "警告", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
 		});

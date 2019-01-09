@@ -3,37 +3,47 @@ package sdibu.SecondYear.JavaTest.LibraryAdmin.bean;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
+import sdibu.SecondYear.JavaTest.LibraryAdmin.dao.days;
+import sdibu.SecondYear.JavaTest.LibraryAdmin.dao.dbBookHistoryFuncion;
+
 public class BooksInformation {
   private int id;
   private String BookName;
   private String TheAuthor;
-  private Date publishedDate;
+  private days publishedDate;
   private String Category;
+  public BooksInformation() {
+	  
+  }
   
-  
-  public BooksInformation(int id, String bookName, String theAuthor, Date publishedDate, String category) {
+  public BooksInformation(int id, String bookName, String theAuthor, days publishedDate, String category) {
 		this.setId(id);
 		this.setBookName(bookName);
 		this.setTheAuthor(theAuthor);
 		this.setPublishedDate(publishedDate);
 		this.setCategory(category);
 }
-  public BooksInformation(String bookName, String theAuthor, Date publishedDate, String category) {
+  public BooksInformation(String bookName, String theAuthor, days publishedDate, String category) {
 	this.setBookName(bookName);
 	this.setTheAuthor(theAuthor);
 	this.setPublishedDate(publishedDate);
 	this.setCategory(category);
 	id = -1;
   }
+
   public String setTime(java.util.Date list) {
 	  SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd");
 		return time.format(list);
 	
 }
   public String[] BooksInformationToString() throws Exception {
-	  String[] str = {BookName,TheAuthor,setTime(publishedDate),Category,(new bookHistory().jugeId(id)?"已借出":"可借")};
+	  String s = null;
+	  dbBookHistoryFuncion db = new dbBookHistoryFuncion();
+	  s = db.searchBookHistory(id+"", "bookId").get(0).isBorrow()?"已借":"可借";
+	  String[] str = {BookName,TheAuthor,setTime(publishedDate),Category,s};
 	  return  str;
   }
+  
 public int getId() {
 	return id;
 }
@@ -52,10 +62,10 @@ public String getTheAuthor() {
 public void setTheAuthor(String theAuthor) {
 	TheAuthor = theAuthor;
 }
-public Date getPublishedDate() {
+public days getPublishedDate() {
 	return publishedDate;
 }
-public void setPublishedDate(Date publishedDate) {
+public void setPublishedDate(days publishedDate) {
 	this.publishedDate = publishedDate;
 }
 public String getCategory() {
@@ -65,6 +75,9 @@ public void setCategory(String category) {
 	Category = category;
 }
 
-
+public String toString() {
+	return String.format("%s,%s,%s,%s",this.getBookName(),this.getTheAuthor(),
+			this.getPublishedDate(),this.getCategory());
+}
   
 }

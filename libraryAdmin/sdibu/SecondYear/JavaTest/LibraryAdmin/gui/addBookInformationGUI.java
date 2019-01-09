@@ -7,6 +7,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -17,6 +21,10 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
+import sdibu.SecondYear.JavaTest.LibraryAdmin.bean.BooksInformation;
+import sdibu.SecondYear.JavaTest.LibraryAdmin.dao.BooksInformationDaoImpl;
+import sdibu.SecondYear.JavaTest.LibraryAdmin.dao.days;
 
 public class addBookInformationGUI extends JFrame {
 	public addBookInformationGUI() {
@@ -82,16 +90,42 @@ public class addBookInformationGUI extends JFrame {
 		
 		JPanel down = new JPanel();
 		JButton sure = new JButton("确定");
+		
 		Dimension preferredSize = new Dimension(100,30);
 		sure.setPreferredSize(preferredSize );//设置按钮大小
 		down.add(sure);
 		sure.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
 				
-				
-			}
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");        
+					Date date = null;
+					try {
+						date = (Date) format.parse("1998-1-1");
+					} catch (ParseException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					try {
+						date = (Date) format.parse(ip3.getText());
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					BooksInformationDaoImpl addbook = new BooksInformationDaoImpl();
+					BooksInformation newBook = new BooksInformation(ip1.getText(),
+							ip2.getText(),new days(date),ip4.getText());
+					int num = Integer.parseInt(ip5.getText());
+					for(int i = 1; i < num; i++) {
+						try {
+							addbook.addBooksInformation(newBook);
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+					
+				}
 		});
 		c.add(down, BorderLayout.SOUTH);
 		
