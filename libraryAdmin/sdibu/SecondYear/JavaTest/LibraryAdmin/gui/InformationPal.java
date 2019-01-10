@@ -179,6 +179,7 @@ public class InformationPal extends JPanel{
 		}			
 		freshTable(vec);
 }
+	
 	public static void main(String[] args) {
 		
 		JFrame me = new JFrame();

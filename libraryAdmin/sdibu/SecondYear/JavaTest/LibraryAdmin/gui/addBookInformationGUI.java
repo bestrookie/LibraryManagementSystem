@@ -16,6 +16,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -100,12 +101,12 @@ public class addBookInformationGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					DateFormat format = new SimpleDateFormat("yyyy-MM-dd");        
 					Date date = null;
-					try {
-						date = (Date) format.parse("1998-1-1");
-					} catch (ParseException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
+//					try {
+//						date = (Date) format.parse("1998-1-1");
+//					} catch (ParseException e2) {
+//						// TODO Auto-generated catch block
+//						e2.printStackTrace();
+//					}
 					try {
 						date = (Date) format.parse(ip3.getText());
 					} catch (ParseException e1) {
@@ -116,15 +117,22 @@ public class addBookInformationGUI extends JFrame {
 					BooksInformation newBook = new BooksInformation(ip1.getText(),
 							ip2.getText(),new days(date),ip4.getText());
 					int num = Integer.parseInt(ip5.getText());
-					for(int i = 1; i < num; i++) {
+					boolean zt = false;
 						try {
-							addbook.addBooksInformation(newBook);
+							for(int i = 1; i <= num; i++) {
+								addbook.addBooksInformation(newBook);
+								//System.out.println("success");
+								zt = true;
+							}
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+					if(zt) {
+						JOptionPane.showMessageDialog(null, "书籍已成功上架", "成功", 
+								JOptionPane.INFORMATION_MESSAGE);
 					}
-					
+					dispose();
 				}
 		});
 		c.add(down, BorderLayout.SOUTH);

@@ -5,8 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
+
 import sdibu.SecondYear.JavaTest.LibraryAdmin.bean.bookHistory;
 import sdibu.SecondYear.JavaTest.LibraryAdmin.gui.addBookInformationGUI;
+import sdibu.SecondYear.JavaTest.LibraryAdmin.util.DBToolTwo;
 
 public class dbBookHistoryFuncion {
 	
@@ -34,7 +37,7 @@ public class dbBookHistoryFuncion {
 	    	Connection con=db.getCon();
 	        String sql="insert into bookhistory values('"+bookName+"','null','"+bookId+"','1998-01-01'"
 	        		+ ",'1998-01-01','0')";
-	        Statement stmt=con.createStatement();
+	        Statement stmt=(Statement) con.createStatement();
 	        int result = stmt.executeUpdate(sql);
 	        db.close(stmt, con);
 	        return result;
@@ -44,26 +47,41 @@ public class dbBookHistoryFuncion {
 		        Connection con=db.getCon();
 		        String sql="insert into bookhistory values('"+bookName+"','"+userId+"','"+
 		        bookId+"','"+lend+"','"+giveBack+"','"+(isBorrow?1:0)+"')";
-		       System.out.println("insert into db_bookhistory values('"+userId+"',"+
-		        bookId+",'"+lend+"',"+giveBack+"','"+(isBorrow?1:0)+"')");
-		        Statement stmt=con.createStatement();//创建一个Statement连接
+		        //System.out.println("insert into db_bookhistory values('"+userId+"',"+
+		        //bookId+",'"+lend+"',"+giveBack+"','"+(isBorrow?1:0)+"')");
+		        Statement stmt=(Statement) con.createStatement();//创建一个Statement连接
 		        int result=stmt.executeUpdate(sql);//执行sql语句
 		        db.close(stmt,con);
 		        return result;
 	    }
 	    
-	    public int updateBookHistory(bookHistory before,bookHistory to) throws Exception {
+	  
+	    public void lendBook(bookHistory before,bookHistory to)throws Exception {
 	    	Connection conn = db.getCon();
-			String sql = "update bookhistory set borrow=?,isBorrow=? where bookId=? lend=? bookName=?";
-			PreparedStatement pst = conn.prepareStatement(sql);
-			pst.setString(1, to.getGiveBack().toString());
-			pst.setBoolean(2, to.isBorrow());
-			pst.setInt(3, before.getBookId());
-			pst.setString(4, before.getLend().toString());
-			pst.setString(5, before.getBookName());
-			int rs = pst.executeUpdate();
+	    	/*String sql = "update bookhistory set lend='"+to.getLend().toString()+
+	    			"',borrow='"+to.getGiveBack().toString()+
+	    			"',isBorrow='1' where bookId='"
+	    			+ before.getBookId()+"' bookName='"
+	    			+before.getBookName()+"'";*/
+	    	String sql1 = "UPDATE bookhistory SET lend=?, borrow=?, isBorrow=?, userId=? WHERE bookId=?";
+	    	//System.out.println(sql1);
+	    	PreparedStatement pst = conn.prepareStatement(sql1);
+			pst.setString(1,to.getLend().toString());
+			pst.setString(2, to.getGiveBack().toString());
+			pst.setString(4, to.getUserId());
+			pst.setInt(5, before.getBookId());
+			pst.setBoolean(3, to.isBorrow());
+			pst.executeUpdate();
 			db.close(pst, conn);
-			return rs;
+	    }
+	    public boolean returnBook(String date,String user,String bookName) throws Exception {
+	    	Connection conn = db.getCon();
+			String sql = "update bookhistory set borrow=?,isBorrow=0 where bookName=?,userId=?";
+			PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, date);
+			pst.setString(2, bookName);
+			pst.setString(3, user);
+			return pst.execute();
 	    }
 	    public List<bookHistory> searchBookHistory(String search,String func) throws Exception {
 			List<bookHistory> result = new ArrayList<bookHistory>();
@@ -88,14 +106,15 @@ public class dbBookHistoryFuncion {
 			pst.close();
 			return result;
 		}
-	    public boolean deleteBookHistory(String name,int count) throws Exception {
+	    public void deleteBookHistory(String count) throws Exception {
 	    	Connection con = db.getCon();
-	    	ResultSet rs;
-	    	PreparedStatement pst = con.prepareStatement("select * from bookhistory where BookName=?");
-			pst.setString(1, name);
-			rs = pst.executeQuery();
-			
-	    	return true;
+	    	PreparedStatement pst = con.prepareStatement("delete from bookhistory where bookId="+count);
+			pst.execute();
+	    }
+	    public void deleteBookHistory(int count) throws Exception {
+	    	Connection con = db.getCon();
+	    	PreparedStatement pst = con.prepareStatement("delete from bookhistory where bookId=?");
+			pst.setInt(1, count);
 	    }
 	    /*public static void main(String args[]) throws Exception {
 	    	dbBookHistoryFuncion xx = new dbBookHistoryFuncion();

@@ -80,7 +80,6 @@ public class LoginGUI extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				
-				
 			}
 
 			@Override
@@ -105,14 +104,12 @@ public class LoginGUI extends JFrame {
 		top.add(password);
 		c.add(top);
 		//组合放到边界布局中间
-		
 		//ImageIcon loginLogo = new ImageIcon("src/sdibu//SecondYear/JavaTest/LibraryAdmin/gui/loginLogo.png");
 		JPanel down = new JPanel();
 		JButton login = new JButton("登录"/*,loginLogo*/);
 		Dimension preferredSize = new Dimension(100,30);
 		login.setPreferredSize(preferredSize );//设置按钮大小
 		login.addActionListener(new ActionListener() {
-			
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -155,13 +152,15 @@ public class LoginGUI extends JFrame {
 										AdminGui superAdmin = new AdminGui();
 										superAdmin.Funcion();
 										superAdmin.AdminGuiInit();
+										dispose();//关闭当前窗体
 										
 									}
 									else {
-										MainGUI normalUser = new MainGUI(list.get(0).getId());
+										MainGUI normalUser = new MainGUI(list.get(0).getId(), c2);
+										dispose();//关闭当前窗体
 									}
 								}
-								dispose();//关闭当前窗体
+								
 							}//密码错误
 							else {
 								JOptionPane.showMessageDialog(null, "密码错误，请检查账号密码", "错误", 

@@ -37,7 +37,7 @@ public class BooksInformationDaoImpl implements BooksInformationDao {
 		return result;
 	}
 
-	public BooksInformation searById(String BookId) throws SQLException {
+	public BooksInformation searchById(String BookId) throws SQLException {
 		BooksInformation result = new BooksInformation();
 		Connection connection = DBToolTwo.getConnection();
 		ResultSet rs;
@@ -57,15 +57,36 @@ public class BooksInformationDaoImpl implements BooksInformationDao {
 		pst.close();
 		return result;
 	}
+	public boolean searchById(int BookId) throws SQLException {
+		BooksInformation result = new BooksInformation();
+		Connection connection = DBToolTwo.getConnection();
+		ResultSet rs;
+		PreparedStatement pst = connection.prepareStatement("select *from booksinformations where Id =? ");
+		pst.setInt(1, BookId);
+		rs = pst.executeQuery();
+		boolean res = true;
+		if(rs.next()) {
+			res = false;
+		}
+		rs.close();
+		pst.close();
+		return res;
+	}
 	@Override
 	public int addBooksInformation(BooksInformation c) throws Exception {
-		int key = -1;
+		Random rad = new Random();
+		int key;
+		do{
+			key = rad.nextInt(10000);
+		}while(!searchById(key));
+		c.setId(key);
 		days day = new days(c.getPublishedDate());
-		
+		dbBookHistoryFuncion db = new dbBookHistoryFuncion();
+		db.addBookHistory(c.getBookName(), c.getId());
 		Connection conn = DBToolTwo.getConnection();
 		Statement state = (Statement) conn.createStatement();
-		String sql = "insert into booksinformations(id,BookName,TheAuthor,publishedDtae,Category) values ('"+c.getId()+"','"
-				+c.getBookName()+ "','"+c.getTheAuthor()+"','"+day.toString()+"','"+c.getCategory()+"')";
+		String sql = "insert into booksinformations(BookName,TheAuthor,publishedDate,Category,id) values ('"
+				+c.getBookName()+ "','"+c.getTheAuthor()+"','"+day.toString()+"','"+c.getCategory()+"','"+key+"')";
 		int result = state.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
 		if(result == 1) {			
 			ResultSet keys = state.getGeneratedKeys();
@@ -75,16 +96,19 @@ public class BooksInformationDaoImpl implements BooksInformationDao {
 		state.close();
 		return key;
 	}
-	public boolean deleteInformation(int id) throws Exception {
-		boolean flag = false;		
+	public void deleteInformation(int id) throws Exception {
 		Connection conn = DBToolTwo.getConnection();
 		Statement state = (Statement) conn.createStatement();
 		String sql = "delete from booksinformations where id ="+id;
-		int result = state.executeUpdate(sql);
-		if(result == 1) 			
-			flag = true;
+		state.executeUpdate(sql);
 		state.close();				
-		return flag;
+	}
+	public void deleteInformation(String id) throws Exception {
+		Connection conn = DBToolTwo.getConnection();
+		Statement state = (Statement) conn.createStatement();
+		String sql = "delete from booksinformations where id ="+id;
+		state.executeUpdate(sql);
+		state.close();				
 	}
 	@Override
 	public List<BooksInformation> searchAll() throws Exception {
@@ -100,6 +124,12 @@ public class BooksInformationDaoImpl implements BooksInformationDao {
 		rs.close();
 		st.close();
 		return result;
+	}
+
+	@Override
+	public boolean updateInformation(BooksInformation c) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -42,7 +42,7 @@ public class UserDaoImpl implements UsersDao {
 		int result = state.executeUpdate(sql);
 		if(result == 1) 			
 			flag = true;
-		System.out.println("删除成功");
+		//System.out.println("删除成功");
 		state.close();				
 		return flag;
 	}
@@ -67,10 +67,6 @@ public class UserDaoImpl implements UsersDao {
 		state.setBoolean(5, frozen);
 							
 		int result = state.executeUpdate();
-		if(result == 1) {			
-			flag = true;
-			System.out.println("添加成功");
-		}
 		state.close();
 		return flag;//将用户信息添加到数据库
 	}
@@ -94,10 +90,6 @@ public class UserDaoImpl implements UsersDao {
 		state.setString(5, id);
 		
 		int result = state.executeUpdate();
-		if(result == 1) {			
-			flag = true;
-			System.out.println("修改成功");
-		}
 		state.close();
 		
 		return flag;

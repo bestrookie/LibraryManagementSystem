@@ -23,7 +23,8 @@ public class bookHistory {
 	public void setBookName(String bookName) {
 		this.bookName = bookName;
 	}
-	public bookHistory() {
+	public bookHistory getbookHistory() {
+		return this;
 		// TODO Auto-generated constructor stub
 	}
 	public bookHistory(String user,String bookName,int book,days lend,days giveBack,boolean isBorrow) {
