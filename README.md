@@ -1,7 +1,7 @@
-# sdibuSecondYearJavaTest
+# LibraryManagementSystem
 
 
-**此项目为山东工商学院17级2018年度java期末大作业**
+此项目为我**大二期间java大作业**，代码质量较低，仅作备份使用
 
 
 # 图书管理系统架构
@@ -41,6 +41,6 @@
 -  冻结状态
 -  权限
 **注意事项**
-1.代码内url需注意重定向
-2.mysql的jdbc驱动为5.1
-3.Main方法从.gui包内的LoginGUI开始
+1. 代码内url需注意重定向
+2. mysql的jdbc驱动为5.1
+3. Main方法从.gui包内的LoginGUI开始
